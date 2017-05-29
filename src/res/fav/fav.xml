@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="fav.xsl"?>
+<favorite max_id="7" number="7">
+  <website>
+    <id>7</id>
+    <title>&#x51E4;&#x51F0;&#x7F51;</title>
+    <image>res/fav/7.bmp</image>
+    <url>http://www.ifeng.com/</url>
+  </website>
+  <website>
+    <id>6</id>
+    <title>&#x65B0;&#x6D6A;&#x9996;&#x9875;</title>
+    <image>res/fav/6.bmp</image>
+    <url>http://www.sina.com.cn/</url>
+  </website>
+  <website>
+    <id>5</id>
+    <title>&#x65B0;&#x95FB;&#x4E2D;&#x5FC3;&#x9996;&#x9875;_&#x65B0;&#x6D6A;&#x7F51;</title>
+    <image>res/fav/5.bmp</image>
+    <url>http://news.sina.com.cn/</url>
+  </website>
+  <website>
+    <id>4</id>
+    <title>360&#x5EA6; &#x96C5;&#x864E;&#x5168;&#x80FD;&#x641C;</title>
+    <image>res/fav/4.bmp</image>
+    <url>http://cn.search.yahoo.com/websrch/</url>
+  </website>
+  <website>
+    <id>3</id>
+    <title>&#x641C;&#x72D7;&#x641C;&#x7D22;&#x5F15;&#x64CE; - &#x4E0A;&#x7F51;&#x4ECE;&#x641C;&#x72D7;&#x5F00;&#x59CB;</title>
+    <image>res/fav/3.bmp</image>
+    <url>http://www.sogou.com/</url>
+  </website>
+  <website>
+    <id>2</id>
+    <title>FMSoft: Home</title>
+    <image>res/fav/2.bmp</image>
+    <url>http://www.minigui.com/</url>
+  </website>
+  <website>
+    <id>1</id>
+    <title>&#x767E;&#x5EA6;&#x4E00;&#x4E0B;&#xFF0C;&#x4F60;&#x5C31;&#x77E5;&#x9053;</title>
+    <image>res/fav/1.bmp</image>
+    <url>http://www.baidu.com/</url>
+  </website>
+</favorite>

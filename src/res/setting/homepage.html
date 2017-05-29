@@ -1,0 +1,145 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><title>homepage Settings</title>
+<style>
+
+.IpText {
+    position: relative;
+    left:80px;
+    top:70px;
+    width:502px;
+    height:40px;
+    border-color:#FFFF00;
+}
+
+.SaveButton {
+    position: relative;
+    top:140px;
+    width:110px;
+    height:30px;
+    margin-left:275px;
+    background-image: url('homepage/save_up.png');
+    background-repeat: no-repeat;
+}
+
+.BackButton {
+    position: relative;
+    top:180px;
+    width:110px;
+    height:30px;
+    margin-left:130px;
+    margin-right:8px;
+    background-image: url('homepage/cancel_up.png');
+    background-repeat: no-repeat;
+}
+
+body {
+    background-color:#CACACA;
+    margin:0px;
+    padding:0px;
+}
+table {margin:0px; padding:0px; border:0px;}
+form {margin:0px; }
+input {padding:0px; border:0px; }
+
+</style>
+
+<script type="text/javascript">
+
+var homePages = new HomePages;
+function notifyMessage(str)
+{
+}
+
+function layout()
+{
+    var contentWidth = 480;
+    var contentHeight = 240;
+    var toolbarHeight = 32;
+
+    var docRoot = document.body;
+    docRoot.style.position = "absolute";
+    docRoot.style.top = 0 ; 
+    docRoot.style.left = 0 ; 
+}
+
+function loadSettings()
+{
+	window.top.document.title = window.document.title;
+	document.forms["settings"].save.value = homePages.save;
+	document.forms["settings"].close.value = homePages.close;
+    layout();
+}
+
+
+function goback()
+{
+    history.back();
+}
+
+function closeSettings()
+{
+    var frmSettings = document.forms["settings"];
+    homePages.close = frmSettings.close.value;
+    goback();
+}
+
+function saveSettings()
+{
+    var frmSettings = document.forms["settings"];
+    homePages.save = frmSettings.save.value;
+    alert("您已成功保存该Http地址！");
+    goback();
+}
+
+function backButtonEvent(down)
+{
+    var frm = document.forms["buttons"];
+    if (down) {
+        frm.backButton.style.backgroundColor = "#fadfac";
+        frm.backButton.style.backgroundImage="url('homepage/cancel_down.png')";
+    } else {
+        frm.backButton.style.backgroundColor = "#a5d1f6";
+        frm.backButton.style.backgroundImage="url('homepage/cancel_up.png')";
+        closeSettings();
+    }
+}
+
+function saveButtonEvent(down)
+{
+    var frm = document.forms["buttons"];
+    if (down) {
+        frm.saveButton.style.backgroundColor = "#fadfac";
+        frm.saveButton.style.backgroundImage ="url('homepage/save_down.png')";
+    } else {
+        frm.saveButton.style.backgroundColor = "#d8ec87";
+        frm.saveButton.style.backgroundImage ="url('homepage/save_up.png')";
+        saveSettings();
+    }
+}
+
+</script></head>
+
+
+<body onload="loadSettings();" leftMargin=0 rightMargin=0 topMargin=0 bottomMargin=0 bgcolor="#cacaca" width=480px height=242px>
+
+<table>
+<tr>
+<td>
+<form name="settings">
+<input name="close" maxlength=32 type="text" class="IpText" style="display:none"><br>
+<input name="save" maxlength=32 type="text" class="IpText"><br>
+</form>
+</td>
+</tr>
+</table>
+
+<table border="0" cellspacing="0" cellpadding="0">
+<form name="buttons">
+<tr>
+<td><input type="submit" class="SaveButton" value="" name="saveButton" onclick="saveButtonEvent(0);"></td>
+</tr>
+</form>
+</table>
+
+</body></html>

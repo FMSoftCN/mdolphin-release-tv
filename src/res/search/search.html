@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
+<head>
+  <title>Search </title>
+  <Meta http-equiv="Content-Type" Content="text/html; Charset=gb2312">
+  <Meta http-equiv="Content-Language" Content="zh-CN">
+<style>
+
+#inhalt {
+position:absolute;
+height:280px;
+width:550px; 
+top: 50%;
+left: 50%;
+margin-left: -325px; 
+margin-top: -140px;
+text-align: left;
+padding: 0px;
+background-color: #f5f5f5;
+border: 1px dotted #000000;
+}
+
+.search {
+    position: relative;
+    top: 5px;
+    width: 550px;
+    height: 45px;
+    margin-left: 8px;
+}
+
+.Text {
+    position: relative;
+    top: 10px;
+}
+
+</style>
+
+<script>
+function check()
+{
+    var target_url;
+    with(document.all){
+        if( url.value.search("^http:\/\/")==0 ){
+            target_url = url.value;
+        }else{
+            target_url = "http://" + url.value;
+        }
+      //  alert(target_url);
+        window.location.href = target_url;
+    }
+}
+
+function onkeydowncheck(e)
+{
+    //var keycode=e.keyCode||e.which||e.charCode;
+    var keycode=e.charCode;
+
+    //    alert("enter " + keycode );
+
+    if (keycode == 13)
+    {
+        var target_url;
+        with(document.all)
+        {
+            if( url.value.search("^http:\/\/")==0 ){
+                target_url = url.value;
+            }else{
+                target_url = "http://" + url.value;
+            }
+            window.location.href = target_url;
+        }
+    }
+
+}
+//document.onkeydown = onkeydowncheck;
+
+function auto_focus()
+{
+    document.getElementById("baidu").focus()
+}
+
+function layout()
+{
+    var docRoot = document.body;
+    docRoot.style.position = "absolute";
+    docRoot.style.top = 100; 
+    docRoot.style.left = 0 ; 
+}
+
+</script> 
+</head>
+
+<body onload=" return auto_focus();" bgcolor="#000000" align="center" ">
+<div id="inhalt" align="center" ><div id="container">
+
+  <div align="center" id="searchbox"> <!-- Search Baidu -->
+            <div class="search">
+	<form method="get" action="http://www.baidu.com/s">
+                <a id="hao_img_logo"  href="http://www.baidu.com/index.php?tn=sitehao123"><img alt="百度首页" width="72" align="middle" src="../website/search/69x26-baidu.png"/></a>
+			<input type="text" class="Text" name="wd" size="30px" maxlength="255" value="" id="baidu" />
+			<input type="submit" class="Text" name="sa" value="Search" id="sbb" />
+
+	</form>
+            </div>
+            <div class="search">
+        <!-- Search SouGou -->
+	<form method="get" action="http://www.sogou.com/web">
+                <a id="shugou_logo" href="http://www.sogou.com/"><img  src="../website/search/74x22-sougou.png" width="72" align="middle" /></a>
+			<input autocomplete="off" maxlength="100" size="30px" onfocus="this.select()" class="Text" id="query" name="query"/>
+			<input type="submit" class="Text" name="sa" value="Search" id="sbb" />
+			<input type="hidden" value="www.sogou.com" name="_asf"/>
+			<input type="hidden" name="_ast"/>
+			<input type="hidden" value="01019900" name="w"/>
+			<input type="hidden" value="40040100" name="p"/>
+
+	</form>
+            </div>
+
+            <div class="search">
+	<!-- Search Bing -->
+	<form method="get" action="http://www.bing.com/">
+              <!--   <a id="bing_logo"  href="http://www.baidu.com/index.php?tn=sitehao123"><img class="sw_logo" src="http://cn.bing.com//fd/s/a/k.png"/></a> -->
+                <a id="bing_logo" href="http://www.bing.com/"><img  src="../website/search/74x29-Bing.png"  width="72" align="middle" /></a>
+			<input id="sb_form_q"  type="text" class="Text"  size="30px" maxlength="255" value=""  name="q" autocomplete="off"/>
+			<input type="submit" class="Text" name="sa" value="Search" id="sbb" />
+
+	</form>
+        </div>
+
+        <!-- Search Yahoo -->
+            <div class="search">
+	<form method="get" action="http://one.cn.yahoo.com/s">
+            <!-- <a id="yahoo_logo" href="http://one.cn.yahoo.com"> <img alt="百度首页" src="http://cn.yimg.com/hp/0910/img/yahoo_logo2.gif" /> </a>  -->
+            <a id="yahoo_logo" href="http://one.cn.yahoo.com"> <img alt="百度首页" src="../website/search/77x26-yahoo.png" width="72" align="middle" /></a> 
+			<input id="p" type="text" class="Text" value="" autocomplete="off" size="30px" maxlength="100" name="p"/>
+			<input type="submit" class="Text" name="sa" value="Search" id="sbb" />
+			<input type="hidden" value="hp" name="pid"/>
+			<input id="v" type="hidden" value="web" name="v"/>
+
+	</form>
+        </div>
+
+        <!-- Search Google -->
+            <div class="search">
+	<form method="get" action="http://www.google.com/cse">
+		<a href="http://www.google.com/"><img src="../website/search/76x29-google.png" alt="Google" align="middle" width="72"  /></a>
+		<label for="sbi" style="display: none">Enter your search terms</label>
+		<input type="text" class="Text" name="q" size="30px" maxlength="255" value="" id="sbi" />
+		<label for="sbb" style="display: none">Submit search form</label>
+		<input type="submit" class="Text" name="sa" value="Search" id="sbb" />
+		<input name="cx" value="partner-pub-9300639326172081:n71jpcz0370" type="hidden" />
+		<input name="ie" value="UTF-8" type="hidden" />
+	</form>
+        </div>
+        
+        <!-- Open set url -->
+        <div class="search">
+        <a href="http://www.minigui.com/"><img alt="GO" width="72" align="middle" src="../website/search/45X26-open.png"></img></a>
+        <input type="text" class="Text" size="30px"  maxlength="100" id="url" onkeydown="return onkeydowncheck(event)">
+        <input type="button" class="Text" value=" Go " onclick="check()" onkeydown="return onkeydowncheck(event)">
+        </div>
+  </div>
+</body>
+</html>

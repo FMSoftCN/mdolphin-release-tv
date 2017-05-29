@@ -1,0 +1,123 @@
+<html>
+<head>
+<TITLE>Home</TITLE>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<style>
+body {
+color:#000000;
+padding:0px;
+margin:0px;
+}
+
+#inhalt {
+position:absolute;
+height:320px;
+width:666px; 
+margin:-160px 0px 0px -346px; 
+top: 50%;
+left: 50%;
+text-align: left;
+padding: 0px;
+background-color: #f5f5f5;
+border: 1px dotted #000000;
+}
+
+.HTTPPng {
+    position: relative;
+    top: 5px;
+    width: 325px;
+    height: 25px;
+    margin-left: 5px;
+}
+
+.NetworkPng {
+    position: relative;
+    top: 5px;
+    width: 325px;
+    height: 25px;
+    margin-left: 8px;
+}
+</style>
+
+<script type="text/javascript">
+
+var imgSrc= new Array( "tabview/http.png",  "tabview/network_setting.png");
+var imgSrcOn= new Array("tabview/http_on.png", "tabview/network_setting_on.png");
+
+function handlelink(id, url){
+    document.forms["sessions"].hideme.value = id;
+    if (document.getElementById){
+/*
+        var tabobj=document.getElementById("list");
+        var tabobjlinks=tabobj.getElementsByTagName("IMG");
+        for (i=0; i<tabobjlinks.length; i++)  {
+            if (i == id)
+                tabobjlinks[i].src=imgSrcOn[i];
+            else
+                tabobjlinks[i].src=imgSrc[i];
+        }
+*/
+        var homepageObj = document.getElementById("homepage");
+        var networkObj = document.getElementById("network");
+        if (0 == id) {
+            homepageObj.src = "tabview/http_on.png";
+            networkObj.src = "tabview/network_setting.png";
+        } else {
+            homepageObj.src = "tabview/http.png";
+            networkObj.src = "tabview/network_setting_on.png";
+        }
+        
+        document.getElementById("tabiframe").src=url;
+        return false;
+    }
+    else
+        return true;
+}
+
+function layout()
+{
+    var contentWidth = 691;
+    var contentHeight = 320;
+    var toolbarHeight = 32;
+
+    var docRoot = document.body;
+    docRoot.style.position = "absolute";
+    docRoot.style.top =0; 
+    docRoot.style.left =2;
+}
+
+function showFrame()
+{
+    //layout();
+        
+    var index = document.forms["sessions"].hideme.value;
+    if (index == "0")
+        handlelink(0, "homepage.html");
+    else if (index == "1")
+        handlelink(1, "network.html");
+}
+</script>
+
+</head>
+<body onload="showFrame();"  bgcolor="#000000">
+<div id="inhalt"> 
+<table  height="38px"  border="0" cellspacing="0" cellpadding="0" id="list">
+<tr>
+<td>
+<input tabindex=1 src="tabview/http_on.png" type="image" id="homepage" class="HTTPPng" onClick="return handlelink( 0, 'homepage.html');" />
+</td>
+<td>
+<input tabindex=2 src="tabview/network_setting.png" type="image" id="network" class="NetworkPng"  onClick="return handlelink( 1, 'network.html');" />
+</td>
+</tr>
+</table>
+
+<iframe id="tabiframe" src="homepage.html" width="666px" height="282px" frameBorder="0px"></iframe>
+
+<form name="sessions" >
+<input name="hideme" type="hidden" value="0"><br>
+</form>
+ </div> 
+</body>
+
+</html>

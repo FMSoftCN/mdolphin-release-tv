@@ -1,0 +1,5 @@
+*******************************************************************************
+What's new in the branch rel-0-4 of mdtv (v0.4.0)
+
+04/09. CLEANUP #1: Remove some definitions in configure.in. (ymwei)
+	* configure.in

@@ -1,0 +1,325 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><title>Network Settings</title>
+<style>
+
+body {
+color:#000000;
+padding:0px;
+margin:0px;
+}
+
+#inhalt {
+position:absolute;
+height:320px;
+width:666px; 
+margin:-160px 0px 0px -346px; 
+top: 50%;
+left: 50%;
+text-align: left;
+padding: 0px;
+background-color: #cacaca;
+border: 1px dotted #000000;
+}
+
+.IpText {
+    position: relative;
+    left:67px;
+    top:0px;
+    width:302px;
+    height:25px;
+    border-color:#000000;
+}
+
+.NetmaskText {
+    position: relative;
+    left:67px;
+    top:20px;
+    width:302px;
+    height:25px;
+    border-color:#FFFF00;
+}
+
+.GatewayText {
+    position: relative;
+    left:67px;
+    top:33px;
+    width:302px;
+    height:25px;
+    border-color:#FFFF00;
+}
+
+.DNSServerText {
+    position: relative;
+    left:67px;
+    top:45px;
+    width:302px;
+    height:25px;
+    border-color:#FFFF00;
+}
+
+.DNSDomainText {
+    position: relative;
+    left:67px;
+    top:60px;
+    width:302px;
+    height:25px;
+    border-color:#FFFF00;
+}
+
+.BackButton {
+    position: relative;
+    top:30px;
+    width:94px;
+    height:30px;
+    margin-left:130px;
+    background-image: url('network/cancel_up.png');
+    background-repeat: no-repeat;
+}
+
+#StatusText {
+    position: absolute;
+    top:40px;
+    left:43px;
+    width:561px;
+    height:30px;
+    background-color:#C0C0C0;
+}
+
+.SaveButton {
+    position: relative;
+    top:30px;
+    width:94px;
+    height:30px;
+    margin-left:180px;
+    background-image: url('network/save_up.png');
+    background-repeat: no-repeat;
+}
+
+.Label {
+    position: relative;
+    left:13px;
+    top:30;
+}
+
+.DHCPPng {
+    position: relative;
+    top: 5px;
+    width: 325px;
+    height: 25px;
+    margin-left: 5px;
+}
+
+.StaticPng {
+    position: relative;
+    top: 5px;
+    width: 325px;
+    height: 25px;
+    margin-left: 10px;
+}
+
+table {margin:0px; padding:0px; border:0px;}
+form {margin:0px; }
+input {padding:0px; border:0px; }
+
+</style>
+
+<script type="text/javascript">
+
+var netSettings = new NetworkSettings;
+function notifyMessage(str)
+{
+    document.getElementById("StatusText").value = str;
+}
+
+function updateNetworkMode()
+{
+    var frmSettings = document.forms["settings"];
+    var obj1,obj2;
+    obj1 = document.getElementById("dhcpButton");
+    obj2 = document.getElementById("staticipButton");
+    if (netSettings.accessType== "DHCP") {
+        obj1.src = "network/dhcp_up.png";
+        obj2.src = "network/static_up.png";
+        frmSettings.ip.disabled = true;
+        frmSettings.netmask.disabled = true;
+        frmSettings.gateway.disabled = true;
+        frmSettings.dnsServer.focus();
+    } else {
+        obj1.src = "network/dhcp_down.png";
+        obj2.src = "network/static_down.png";
+        frmSettings.ip.disabled = false;
+        frmSettings.netmask.disabled = false;
+        frmSettings.gateway.disabled = false;
+        frmSettings.ip.focus();
+    }
+    notifyMessage(netSettings.accessType);
+}
+
+function layout()
+{
+    var contentWidth = 480;
+    var contentHeight = 240;
+    var toolbarHeight = 32;
+
+    var docRoot = document.body;
+    docRoot.style.position = "absolute";
+    docRoot.style.top = 0 ; 
+    docRoot.style.left = 0 ; 
+}
+
+function loadSettings()
+{
+    window.top.document.title = window.document.title;
+
+    document.forms["settings"].ip.value = netSettings.ip;
+    document.forms["settings"].netmask.value = netSettings.netmask;
+    document.forms["settings"].gateway.value = netSettings.gateway;
+    document.forms["settings"].dnsServer.value = netSettings.dnsServer;
+    document.forms["settings"].dnsDomain.value = netSettings.dnsDomain;
+
+    updateNetworkMode();
+
+    //layout();
+}
+
+function changeMode(obj)
+{
+    netSettings.accessType = obj;
+    loadSettings();
+}
+
+function goback()
+{
+    history.back();
+}
+
+function saveSettings()
+{
+    var frmSettings = document.forms["settings"];
+    netSettings.ip = frmSettings.ip.value;
+    netSettings.netmask = frmSettings.netmask.value;
+    netSettings.gateway = frmSettings.gateway.value;
+    netSettings.dnsServer = frmSettings.dnsServer.value;
+    netSettings.dnsDomain = frmSettings.dnsDomain.value;
+
+    alert("checking configuration, please wait!");
+
+    notifyMessage("Start to apply settings.");
+    var ret = netSettings.apply();
+    switch (ret) {
+    case 0:
+        notifyMessage("Network settings is successful!");
+        break;
+    case -1:
+        notifyMessage("Invalid settings!");
+        return;
+    case -2:
+        notifyMessage("Failed to start DHCP!");
+        return;
+    case -3:
+        notifyMessage("Failed to set IP!");
+        return;
+    case -4:
+        notifyMessage("Failed to set DNS Server!");
+        break;
+    case -5:
+        notifyMessage("Failed to set Route!");
+        break;
+    default:
+        notifyMessage("Unknow error!");
+        return;
+    }
+
+    notifyMessage("Start to check network.");
+    ret = netSettings.test();
+    switch (ret) {
+    case 0:
+        break;
+    case -1:
+        notifyMessage("Failed to connect IP!");
+        return;
+    case -2:
+        notifyMessage("Failed to connect Gateway!");
+        return;
+    case -3:
+        notifyMessage("Failed to connect DNS Server!");
+        return;
+    default:
+        notifyMessage("Unknow error!");
+        return;
+    }
+    notifyMessage("Network is avaliable!");
+    goback();
+}
+
+function backButtonEvent(down)
+{
+    var frm = document.forms["buttons"];
+    if (down) {
+        frm.backButton.style.backgroundColor = "#fadfac";
+        frm.backButton.style.backgroundImage="url('network/cancel_down.png')";
+    } else {
+        frm.backButton.style.backgroundColor = "#a5d1f6";
+        frm.backButton.style.backgroundImage="url('network/cancel_up.png')";
+        goback();
+    }
+}
+
+function saveButtonEvent(down)
+{
+    var frm = document.forms["buttons"];
+    if (down) {
+        frm.saveButton.style.backgroundColor = "#fadfac";
+        frm.saveButton.style.backgroundImage ="url('network/save_down.png')";
+    } else {
+        frm.saveButton.style.backgroundColor = "#d8ec87";
+        frm.saveButton.style.backgroundImage ="url('network/save_up.png')";
+        saveSettings();
+    }
+}
+
+</script></head>
+
+
+<body onload="loadSettings();" leftMargin=0 rightMargin=0 topMargin=0 bottomMargin=0 bgcolor="#0x000000" width=480px height=242px>
+ <div id="inhalt">
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td>
+<input tabindex=1 type="image" id="dhcpButton" src="network/dhcp_up.png" class="DHCPPng" onclick="changeMode('DHCP')">
+</td>
+<td>
+<input tabindex=2 type="image" id="staticipButton" src="network/static_down.png" class="StaticPng" onclick="changeMode('StaticIP');">
+</td>
+</tr>
+</table>
+
+<table border="0" cellspacing="30px" cellpadding="0">
+<tr>
+<td>
+<img id="Label" src="network/form_label.png" class="Label">
+</td>
+<td>
+<form name="settings">
+<input name="ip" maxlength=32 type="text" class="IpText"><br>
+<input name="netmask" maxlength=32 type="text" class="NetmaskText"><br>
+<input name="gateway" maxlength=32 type="text" class="GatewayText"><br>
+<input name="dnsServer" maxlength=64 type="text" class="DNSServerText"><br>
+<input name="dnsDomain" maxlength=64 type="text" class="DNSDomainText"><br>
+</form>
+</td>
+</tr>
+</table>
+
+<table border="0" cellspacing="0" cellpadding="0">
+<form name="buttons">
+<tr>
+<td><input type="reset" class="BackButton" value="" name="backButton" border-color="#FFFF00" onclick="backButtonEvent(0);"></td>
+<td><input type="text" id="StatusText" disabled="true"></input></td>
+<td><input type="submit" class="SaveButton" value="" name="saveButton" onclick="saveButtonEvent(0);"></td>
+</tr>
+</form>
+</table>
+ </div> 
+</body></html>

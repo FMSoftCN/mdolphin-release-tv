@@ -1,0 +1,254 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_PREREQ(2.59)
+AC_INIT(mdtv, 0.4.0, www.minigui.com)
+AC_CONFIG_HEADER(mdtvconfig.h)
+
+dnl ========================================================================
+dnl needed for cross-compiling
+AC_CANONICAL_SYSTEM
+
+dnl ========================================================================
+dnl Checks for programs.
+AC_PROG_MAKE_SET
+AC_PROG_CXX
+AC_PROG_CC
+AC_PROG_LIBTOOL
+
+AM_INIT_AUTOMAKE(mdtv, 0.4.0)
+
+dnl ========================================================================
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+
+dnl ========================================================================
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_HEADER_TIME
+AC_CHECK_HEADERS(sys/time.h unistd.h)
+
+dnl ========================================================================
+dnl check for libminigui
+have_libminigui="no"
+AC_CHECK_HEADERS(minigui/common.h, have_libminigui=yes, foo=bar)
+
+dnl ========================================================================
+dnl check for non-UNIX system
+unix="yes"
+AC_CHECK_DECLS(__NOUNIX__, unix="no", foo=bar)
+
+dnl ========================================================================
+dnl check for run-time mode of MiniGUI
+dnl ========================================================================
+threads_version="no"
+AC_CHECK_DECLS(_MGRM_THREADS, threads_version="yes", foo=bar, [#include <minigui/common.h>])
+
+custom_version="no"
+AC_CHECK_DECLS(_MGIAL_CUSTOM, custom_version="yes", foo=bar, [#include <minigui/common.h>])
+
+procs_version="no"
+AC_CHECK_DECLS(_MGRM_PROCESSES, procs_version="yes", foo=bar, [#include <minigui/common.h>])
+
+standalone_version="no"
+AC_CHECK_DECLS(_MGRM_STANDALONE, standalone_version="yes", foo=bar, [#include <minigui/common.h>])
+
+AC_ARG_WITH(lang,
+        [  --with-lang=[en/zhcn/zhtw]])
+
+case "$with_lang" in
+  zhcn)
+    AC_DEFINE(_LANG_ZHCN, 1, 
+            [Use text strings for locale zh_CN in GB2312])
+    ;;
+  zhtw)
+    AC_DEFINE(_LANG_ZHTW, 1, 
+            [Use text strings for locale zh_TW in BIG5])
+    ;;
+  *)
+    AC_DEFINE(_LANG_EN, 1, 
+            [Use text strings for locale en_US in ISO8859-1])
+    ;;
+esac
+dnl =============       for MDTV              ==============================
+build_style_1024x768="yes"
+build_have_fav_config="yes"
+build_incoreres="no"
+build_enablesoftime="no"
+
+AC_ARG_ENABLE(style1024x768,
+        [  --enable-style1024x768   build support style 1024x768 <default=yes>],
+        build_style_1024x768="$enableval")
+
+AC_ARG_ENABLE(favconfigfile,
+        [  --enable-favconfigfile   build support favrite website store in file system <default=yes>],
+        build_have_fav_config="$enableval")
+
+AC_ARG_ENABLE(softime,
+        [  --enable-softime   build support softkeyboard for touch screen  <default=no>],
+        build_enablesoftime="$enableval")
+
+AC_ARG_ENABLE(incoreres,
+[  --enable-incoreres      enable to use incore resource<default=no>],
+build_incoreres=$enableval)
+
+AC_ARG_WITH(searchengine,
+[  --with-searchengine     The default search engine],
+with_searchengine=$withval)
+
+AC_ARG_WITH(homeurl,
+[  --with-homeurl          The Home URL (string)],
+with_homeurl=$withval)
+
+if test "x$with_searchengine" = "x"; then
+    echo "no search engine defined"
+else
+    echo "search engine is $with_searchengine"
+fi
+
+if test "x$with_homeurl" = "x"; then
+    echo "no Home URL defined"
+else
+    echo "Home URL is $with_homeurl"
+fi
+
+#user define macores
+if test "x$build_style_1024x768" = "xyes"; then
+    AC_DEFINE(MDTV_1024x768, 1, [Define if 1024x768 resolution is supported.])
+fi
+
+if test "x$build_have_fav_config" = "xyes"; then
+    AC_DEFINE(MDTV_HAVE_FAVFILE, 1, [Define if have favorite website store in file system.])
+fi
+
+if test "x$build_enablesoftime" = "xyes"; then
+    AC_DEFINE(MDTV_ENABLE_SOFTIME, 1, [Define if need support softkeyboard.])
+fi
+
+
+if test "x$build_incoreres" = "xyes"; then
+    AC_DEFINE(MDTV_INCORE_RES, 1, [Define if incore resource is supported.])
+fi
+
+if test "x$with_searchengine" != "x"; then
+    AC_DEFINE_UNQUOTED(MDTV_SEARCH_ENGINE, "${with_searchengine}", [Define if search engine is supported.])
+fi
+
+if test "x$with_homeurl" != "x"; then
+    AC_DEFINE_UNQUOTED(MDTV_HOME_URL, "${with_homeurl}", [Define if search engine is supported.])
+fi
+dnl ========================================================================
+dnl Write Output
+
+if test "$ac_cv_prog_gcc" = "yes"; then
+    CFLAGS="$CFLAGS -Wall -Wstrict-prototypes -pipe"
+fi
+
+AC_CHECK_DECLS(_MGLIB_SUFFIX, build_minigui_v3="yes", foo=bar, [[#include <minigui/common.h>]] )
+AM_CONDITIONAL(MINIGUI_V3, test "x$build_minigui_v3" = "xyes")
+
+if test "x$build_minigui_v3" = "xyes"; then
+AC_CHECK_DECLS(_MGFONT_TTF, LIBS="$LIBS -lttf", foo=bar, [#include <minigui/common.h>])
+AC_CHECK_DECLS(_MGFONT_FT2, LIBS="$LIBS -lfreetype", foo=bar, [#include <minigui/common.h>])
+AC_CHECK_DECLS(_MGFONT_SEF, LIBS="$LIBS -lscripteasy", foo=bar, [#include <minigui/common.h>])
+AC_CHECK_DECLS(_HAVE_MATH_LIB, LIBS="$LIBS -lm -lfreetype", foo=bar, [#include <minigui/common.h>])
+AC_CHECK_DECLS(_MGIMAGE_PNG, LIBS="$LIBS -lpng", foo=bar, [#include <minigui/common.h>])
+AC_CHECK_DECLS(_MGIMAGE_JPG, LIBS="$LIBS -ljpeg", foo=bar, [#include <minigui/common.h>])
+else
+AC_CHECK_DECLS(_HAVE_MATH_LIB, LIBS="$LIBS -lm", foo=bar, [#include <minigui/common.h>])
+AC_CHECK_DECLS(_PNG_FILE_SUPPORT, LIBS="$LIBS -lpng", foo=bar, [#include <minigui/common.h>])
+AC_CHECK_DECLS(_PNG_FILE_SUPPORT, LIBS="$LIBS -lpthread", foo=bar, [#include <minigui/common.h>])
+AC_CHECK_DECLS(_JPG_FILE_SUPPORT, LIBS="$LIBS -ljpeg", foo=bar, [#include <minigui/common.h>])
+AC_CHECK_DECLS(_TYPE1_SUPPORT, LIBS="$LIBS -lt1", foo=bar, [#include <minigui/common.h>])
+AC_CHECK_DECLS(_TTF_SUPPORT, LIBS="$LIBS -lttf", foo=bar, [#include <minigui/common.h>])
+AC_CHECK_DECLS(_FT2_SUPPORT, LIBS="$LIBS -lfreetype", foo=bar, [#include <minigui/common.h>])
+fi
+
+if test "x$build_minigui_v3" = "xyes"; then
+    if test "x$threads_version" = "xyes"; then
+        if test "x$custom_version" = "xyes"; then
+            LIBS="$LIBS -lminigui_cstm -lpthread"
+        else
+            LIBS="$LIBS -lminigui_ths -lpthread"
+        fi
+    else
+        if test "x$standalone_version" = "xyes"; then
+            CFLAGS="$CFLAGS -D_REENTRANT"
+            if test "x$custom_version" = "xyes"; then
+                LIBS="$LIBS -lminigui_cstm"
+            else
+                LIBS="$LIBS -lminigui_sa"
+            fi
+        else
+            if test "x$custom_version" = "xyes"; then
+                LIBS="$LIBS -lminigui_cstm"
+            else
+                LIBS="$LIBS -lminigui_procs"
+            fi
+        fi
+        lib_pthread="yes"
+        AC_CHECK_DECLS(_MGGAL_SHADOW, LIBS="$LIBS -lpthread", lib_pthread="no", [#include <minigui/common.h>])
+        if test "x$lib_pthread" = "xno"; then
+            AC_CHECK_DECLS(_MGGAL_MLSHADOW, LIBS="$LIBS -lpthread", no_pthread="no", [#include <minigui/common.h>])
+        fi
+    fi
+else
+    if test "x$threads_version" = "xyes"; then
+        CFLAGS="$CFLAGS -D_REENTRANT"
+        LIBS="$LIBS -lpthread -lminigui"
+    else
+        LIBS="$LIBS -lminigui"
+    fi
+fi
+
+AM_CONDITIONAL(MGRM_PROCESSES, test "x$procs_version" = "xyes")
+
+
+dnl ========================================================================
+dnl check for libmdolphin
+have_libmdolphin="no"
+AC_CHECK_HEADERS(mdolphin/mdconfig.h, have_libmdolphin=yes, foo=bar)
+
+# add curl to build option
+CFLAGS="$CFLAGS `curl-config --cflags`"
+CXXFLAGS="$CXXFLAGS `curl-config --cflags`"
+LIBS="$LIBS `curl-config --libs`"
+
+# add xml2 to build option
+AC_CHECK_DECLS(ENABLE_XML, LIBS="$LIBS `xml2-config --libs`", foo=bar, [#include <mdolphin/mdconfig.h>])
+
+# add xslt to build option
+AC_CHECK_DECLS(ENABLE_XSLT, LIBS="$LIBS `xslt-config --libs`", foo=bar, [#include <mdolphin/mdconfig.h>])
+
+CFLAGS="$CFLAGS -Wall -pipe" 
+CXXFLAGS="$CXXFLAGS -Wall -Wno-strict-aliasing -pipe"
+LIBS="$LIBS -lpthread"
+
+LIBS="$LIBS  -lmdolphin"
+
+# add curl to build option
+CFLAGS="$CFLAGS `xml2-config --cflags`"
+CXXFLAGS="$CXXFLAGS `xml2-config --cflags`"
+LIBS="$LIBS `xml2-config --libs`"
+
+AC_OUTPUT(
+Makefile
+svgui/Makefile
+src/Makefile
+)
+
+if test "x$have_libminigui" != "xyes"; then
+    AC_MSG_WARN([
+        MiniGUI is not properly installed on the system. You need 
+        MiniGUI Ver 3.0.6 or later for building this package. 
+        Please configure and install MiniGUI Ver 3.0.6 first.
+    ])
+fi
+
+if test "x$have_libmdolphin" != "xyes"; then
+    AC_MSG_WARN([
+        MDolphin is not properly installed on the system. You need 
+        MDolphin Ver 2.0.6 or later for building this package. 
+        Please configure and install MDolphin Ver 2.0.6 first.
+    ])
+fi
+

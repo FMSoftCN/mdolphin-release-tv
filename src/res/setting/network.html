@@ -1,0 +1,152 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><title>Network Settings</title>
+<style>
+
+.Label {
+    position: fixed;
+    left: 120;
+    top: 32;
+}
+
+.AccessType {
+    position: fixed;
+    left: 17;
+    top: 32;
+    border-color:#FFFF00;
+}
+
+.SetButton {
+    position: fixed;
+    left: 17;
+    top: 87px;
+    border-color:#FFFF00;
+}
+
+.IpText {
+    position: fixed;
+    left: 340px;
+    top: 23px;
+    width:301px;
+    height:25px;
+    background-color:#B0B0B0;
+    border-color:#FFFF00;
+}
+
+.NetmaskText {
+    position: fixed;
+    left: 340px;
+    top: 65px;
+    width:301px;
+    height:25px;
+    background-color:#B0B0B0;
+    border-color:#FFFF00;
+}
+
+
+.GatewayText {
+    position: fixed;
+    left: 340px;
+    top:100px;
+    width:301px;
+    height:25px;
+    background-color:#B0B0B0;
+    border-color:#FFFF00;
+}
+
+
+.DNSServerText {
+    position: fixed;
+    left: 340px;
+    top:140px;
+    width:301px;
+    height:25px;
+    background-color:#B0B0B0;
+    border-color:#FFFF00;
+}
+
+.DNSDomainText {
+    position: fixed;
+    left: 340px;
+    top:175px;
+    width:301px;
+    height:25px;
+    background-color:#B0B0B0;
+    border-color:#FFFF00;
+}
+
+body {
+    background-repeat:no-repeat;
+    background-color:#CACACA;
+    margin:0px;
+    padding:0px;
+}
+
+table {margin:0px; padding:0px; border:0px;}
+form {margin:0px; }
+input {padding:0px; border:0px; }
+
+</style>
+
+<script type="text/javascript">
+
+var netSettings = new NetworkSettings;
+
+function updateNetworkMode()
+{
+    var obj = document.getElementById('AccessType');
+    if (netSettings.accessType == "DHCP")
+        obj.src = "network/dhcp_icon.png";
+    else 
+        obj.src = "network/static_icon.png";
+}
+
+function loadSettings()
+{
+	document.forms["settings"].ip.value = netSettings.ip;
+    document.forms["settings"].netmask.value = netSettings.netmask;
+    document.forms["settings"].gateway.value = netSettings.gateway;
+    document.forms["settings"].dnsServer.value = netSettings.dnsServer;
+    document.forms["settings"].dnsDomain.value = netSettings.dnsDomain;
+
+	window.top.document.title = window.document.title;
+    updateNetworkMode();
+}
+
+function gotoConfig()
+{
+    window.top.location = "network1.html";
+}
+
+function changeIcon(down)
+{
+    var obj = document.getElementById("SetButton");
+    if (down == 0) {
+        obj.src="network/setbutton_up.png";
+        gotoConfig();
+    } else {
+        obj.src="network/setbutton_down.png";
+    }
+}
+
+function destroySettings()
+{
+    netSettings = null;
+}
+
+</script></head>
+
+<body onload="loadSettings();" onunload="destroySettings();" leftMargin=0 rightMargin=0 topMargin=0 bottomMargin=0 >
+<img id="AccessType" src="network/dhcp_icon.png" class="AccessType">
+<input id="SetButton" src="network/setbutton_up.png" type="image" class="SetButton" tabindex=0 onclick="gotoConfig();">
+<img id="Label" src="network/form_label.png" class="Label">
+
+<form name="settings">
+<input name="ip" maxlength=32 type="text" disabled="true" class="IpText"><br>
+<input name="netmask" maxlength=32 type="text" disabled="true" class="NetmaskText"><br>
+<input name="gateway" maxlength=32 type="text" disabled="true" class="GatewayText"><br>
+<input name="dnsServer" maxlength=64 type="text" disabled="true" class="DNSServerText"><br>
+<input name="dnsDomain" maxlength=64 type="text" disabled="true" class="DNSDomainText"><br>
+</form>
+
+</body></html>
